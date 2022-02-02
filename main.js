@@ -1,61 +1,45 @@
+function setup() {
+    re = 0;
+    le = 0;
 
-difference=0;
-leftWristX=0;
-rightWristX=0;
+    rwx = 0;
+    lwx = 0;
 
-txt='Your Text';
+    difference = 0;
 
-while (true) {
-    txt=document.getElementById('name')
-}
-
-function setup()
-{
     video = createCapture(VIDEO);
     video.size(500, 400);
 
-     canvas = createCanvas(500, 400);
-     canvas.position(560, 150);
+    canvas = createCanvas(500, 400);
+    canvas.position(560, 200);
 
-     poseNet = ml5.poseNet(video, modelLoaded);
-     poseNet.on('pose', gotPoses);
-
-}
-function draw()
-{
-    background('#0000FF');
-
-    document.getElementById("font_size").innerHTML = "Width And Height of the Text will be = " + difference + "px";
-    fill('#F90093');
-    textSize(difference);
-    
-    text(txt, 100, 200 );
-
+   
+    poseNet=ml5.poseNet(video,modelLoaded);
+    poseNet.on("pose",gotPoses);
 }
 
-function modelLoaded()
-{
-    console.log("PoseNet Is Initialized");
+function draw() {
+    background('white');
+    document.getElementById("font").innerHTML = "The Font's Size Is: " + difference + " px";
+    fill('black');
+    text('Danny', re, le);
+    textSize(difference)
 }
 
-function gotPoses(results)
-{
-    if(results.length > 0)
-    {
+function modelLoaded() {
+    console.log("-----\nposeNet model loaded!\n-----");
+}
+
+function gotPoses(results) {
+    if(results.length>0){
+        
         console.log(results);
+    re = results[0].pose.rightEye.x;
+    le = results[0].pose.leftEye.x;
+    rwx = results[0].pose.rightWrist.x;
+    lwx = results[0].pose.leftWrist.x;
 
-        leftWristX = results[0].pose.leftWrist.x;
-        rightWristX = results[0].pose.rightWrist.x;
-        difference= floor(leftWristX - rightWristX);
+    difference = floor(lwx - rwx);
 
-        console.log(" leftWristX = " + leftWristX + " rightWristX = " + rightWristX + " difference = " + difference);
-    }
-}
-
-// while (true) {
-//     txt=document.getElementById('name')
-// }
-
-function lol(){
-    txt= document.getElementById('name');
-}
+    console.log(re + le + rwx + lwx);
+}}
